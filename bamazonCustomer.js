@@ -23,17 +23,52 @@ function start() {
     console.log('Retrieving available items...\n');
     connection.query('SELECT * FROM products', function(err, res) {
         if (err) throw err;
-        for (var i = 0; i <res.length; i++) {
-            // console.log(res[i]);
 
-            console.log(
-                "***************************************" +
-                "\nID: " + res[i].id +
-                "\nProduct: " + res[i].product_name +
-                "\nDepartment: " + res[i].department_name +
-                "\nPrice: " + res[i].price +
-                "\nAvailable In Stock: " + res[i].stock_quantity
-            );
+        for (var i = 0; i <res.length; i++) {
+            console.log(res[i]);
+
+            // console.log(
+            //     "***************************************" +
+            //     "\nID: " + res[i].id +
+            //     "\nProduct: " + res[i].product_name +
+            //     "\nDepartment: " + res[i].department_name +
+            //     "\nPrice: " + res[i].price +
+            //     "\nAvailable In Stock: " + res[i].stock_quantity
+            // );
         }
     });
+    uPrompt();
+}
+
+function uPrompt() {
+    connection.query('SELECT id FROM products', function(err, res) {
+        if (err) throw err;
+            // console.log(res);
+                for (var i = 0; i <res.length; i++) {
+                    console.log(res[i]);
+                }
+
+        inquirer
+            .prompt([
+                {
+                    name: 'choice',
+                    type: 'list',
+                    choices: [res.id],
+                    message: 'Which product [ID] would you like to purchase?'
+                },
+        //         {
+        //             name: 'amount',
+        //             type: 'input',
+        //             message: 'How many units of the product would you like to purchase?'
+        //         }
+            ])
+        //     .then(function(answer) {
+        //         var chosenItem;
+        //             for (var i = 0; i <res.length; i++) {
+        //                 if (res[i].id === answer.choice) {
+        //                     chosenItem = res[i];
+        //                 }
+        //             }
+        //     })
+    })
 }
