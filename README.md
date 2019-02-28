@@ -10,3 +10,25 @@ BamazonCustomer:
 
 Future Features:
 * Manager View - where you, as the Manager, will be able to view products for sale, check low inventory, add more to your inventory, and add a new product.
+
+# Getting Started:
+* Have your MySQL Workbench open and connected to your local sever.
+* Set up the schema by using the bamazonSchema.sql file.
+* In order for you to get the same data into the table, you can use the bamazonSeeds.sql file to input the tables correctly.
+* Refresh your Schema in order to display your newly made database and table.
+* Make sure to run "SELECT * FROM products" in order for your table to appear.
+* Then, you will be able to use the bamazonCustomer app.
+
+# Technologies Used:
+* Javascript
+* Node.js
+* MySQL Workbench
+
+# NPM Packages Used:
+* mysql
+* inquirer
+* cli-table2
+* dotenv
+
+# Screenshots:
+#### Bamazon schema in MySQL Workbench

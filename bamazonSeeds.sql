@@ -16,7 +16,7 @@ CREATE TABLE products (
 INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES
 	("HUGE 4K UHD Samsung TV", "Electronics", 2399.99, 1000),
-    ("Small 4K UHD Samsung TV", "Electronics", 180, 300),
+    ("Small 4K UHD Samsung TV", "Electronics", 180.00, 300),
     ("Hocus Pocus", "Movies", 10.18, 20),
     ("Beetlejuice", "Movies", 5.49, 11),
     ("PlayStation 4 Pro", "Gaming Consoles", 399.99, 500),
