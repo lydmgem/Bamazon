@@ -1,74 +1,101 @@
 require('dotenv').config();
 var mysql = require('mysql');
 var inquirer = require('inquirer');
+var Table = require('cli-table2');
+var displayT = require('./displayT.js')
 
 // Create the connection info for the sql database
 var connection = mysql.createConnection({
-    // I stored these information in a .env file which is not included in being uploaded to Github for privacy purposes.
-        host: process.env.DB_HOST,
-        port: process.env.DB_PORT,
-        user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_DATABASE
+    // I stored these information in a .env file which is not included in being uploaded to Github for privacy purposes. Psuedocoded the default format.
+        host: process.env.DB_HOST, //host: 'localhost',
+        port: process.env.DB_PORT, //port: 3306,
+        user: process.env.DB_USER, //user: 'root'
+    password: process.env.DB_PASSWORD, //password: '' *your mysql workbench password*
+    database: process.env.DB_DATABASE //database 'bamazon_DB'
 });
 
 // Connect to the mysql server and mysql database
 connection.connect(function(err) {
     if (err) throw err;
-    start();
+
+    console.log('\nHello there! Please look through our item list.');
+    displayTable();
 });
 
 // To start, display all of the items in your Bamazon
-function start() {
-    console.log('Retrieving available items...\n');
-    connection.query('SELECT * FROM products', function(err, res) {
-        if (err) throw err;
-
-        for (var i = 0; i <res.length; i++) {
-            console.log(res[i]);
-
-            // console.log(
-            //     "***************************************" +
-            //     "\nID: " + res[i].id +
-            //     "\nProduct: " + res[i].product_name +
-            //     "\nDepartment: " + res[i].department_name +
-            //     "\nPrice: " + res[i].price +
-            //     "\nAvailable In Stock: " + res[i].stock_quantity
-            // );
-        }
+var displayTable = function() {
+    var display = new displayT();
+    connection.query('SELECT * FROM products', function(err, res){
+        display.displayInventory(res);
+        purchase();
     });
-    uPrompt();
 }
 
-function uPrompt() {
-    connection.query('SELECT id FROM products', function(err, res) {
-        if (err) throw err;
-            // console.log(res);
-                for (var i = 0; i <res.length; i++) {
-                    console.log(res[i]);
+// Prompt the user to enter the ID amount that they would like to purchase
+var purchase = function() {
+    console.log('\n ');
+    inquirer
+        .prompt([
+            {
+                name: "id",
+                type: "input",
+                message: "Which item [ID] would you like the purchase?"
+            },
+            {
+                name: "amount",
+                type: "input",
+                message: "How many of these items would you like the purchase?"
+            }
+        ])
+        .then(function(answer) {
+            connection.query('SELECT product_name, department_name, price, stock_quantity FROM products WHERE ?', {id: answer.id}, function(err, res) {
+                
+                console.log('\n  You want to buy ' + answer.amount + ' ' + res[0].product_name + ' ' + res[0].department_name + ' for $' + res[0].price + ' each.');
+
+                if (res[0].stock_quantity >= answer.amount) {
+                    // If there is sufficient amount of inventory to complete the order, process it by updating the database and let the customer know that the order is complete.
+                    var itemQuantity = res[0].stock_quantity - answer.amount;
+
+                    connection.query('UPDATE products SET ? WHERE ?', [{stock_quantity: itemQuantity}, {id: answer.id}], function(err, res) {
+                        if (err) throw err;
+                    });
+                    var total = res[0].price * answer.amount;
+                    console.log('\n  Your Order has been fulfilled! The total cost is $' + total + '.\n');
+
+                    userPrompt();
                 }
+                else {
+                    console.log('  Sorry, we do not have a sufficient amount of that item in stock to fulfill your order!\n');
 
-        inquirer
-            .prompt([
-                {
-                    name: 'choice',
-                    type: 'list',
-                    choices: [res.id],
-                    message: 'Which product [ID] would you like to purchase?'
-                },
-        //         {
-        //             name: 'amount',
-        //             type: 'input',
-        //             message: 'How many units of the product would you like to purchase?'
-        //         }
-            ])
-        //     .then(function(answer) {
-        //         var chosenItem;
-        //             for (var i = 0; i <res.length; i++) {
-        //                 if (res[i].id === answer.choice) {
-        //                     chosenItem = res[i];
-        //                 }
-        //             }
-        //     })
-    })
+                    userPrompt();
+                }
+            })
+        });
 }
+
+function userPrompt() {
+    inquirer
+        .prompt([
+            {
+                name: "action",
+                message: "Would you like to continue shopping?",
+                type: "list",
+                choices: ["Yes", "No"]
+            }
+        ])
+        .then(function(answer) {
+            switch(answer.action) {
+                case 'Yes':
+                    displayTable();
+                break;
+
+                case 'No':
+                    console.log('\n  Thank you, come back again soon!\n');
+                    connection.end();
+                break;
+
+                default:
+                    userPrompt();
+            }
+        })
+};
