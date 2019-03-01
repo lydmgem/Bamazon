@@ -28,11 +28,11 @@ Future Features:
 * mysql
 * inquirer
 * cli-table2
-* dotenv
+* dotenv -- I included a .env file to my .gitignore to store my private password to MySQL Workbench.
 
 # Screenshots:
-#### Bamazon schema in MySQL Workbench
-![Example1](https://github.com/lydmgem/Bamazon/blob/master/assets/images/Example1.gif?raw=true)
+#### Bamazon schema in MySQL Workbench:
+![Schema](https://github.com/lydmgem/Bamazon/blob/master/assets/images/Schema.png?raw=true)
 
 #### Screenshot 1:
 This first GIF displays how the customer interacts with the app when they have successfully placed their order.
@@ -56,4 +56,4 @@ This GIF will display how the app interacts with the customer if they try to ord
 * If yes, they will go through the order process again.
 * If no, the app will end the connection.
 
-#### Screenshot 1:
+![Example2](https://github.com/lydmgem/Bamazon/blob/master/assets/images/Example2.gif?raw=true)
