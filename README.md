@@ -32,3 +32,28 @@ Future Features:
 
 # Screenshots:
 #### Bamazon schema in MySQL Workbench
+![Example1](https://github.com/lydmgem/Bamazon/blob/master/assets/images/Example1.gif?raw=true)
+
+#### Screenshot 1:
+This first GIF displays how the customer interacts with the app when they have successfully placed their order.
+
+* The initial display lets the customer view the products that are available to order, as well as their price and the available quantity on stock.
+* The customer is then prompted to choose which product they would like to order and the quantity they wish to proceed with.
+* If there is sufficient amount of that particular product, the app proceeds to process their order and will let the customer know their total.
+* Afterwards, the customer will be asked if they would like to continue shopping.
+* If the customer chooses yes, the available products will be displayed again with the updated quantity from the last process.
+* If the customer chooses no, that will end the connection of the app.
+
+![Example1](https://github.com/lydmgem/Bamazon/blob/master/assets/images/Example1.gif?raw=true)
+
+#### Screenshot 2:
+This GIF will display how the app interacts with the customer if they try to order a product that has insufficient amount on stock.
+
+* Per usual, it starts off with the display of the amount of products.
+(Note: The database, specifically the stock quantity, should be updated from the last time the app has been used.)
+* When the customer tries to order over the amount of the available quantity, the app will notify the customer that it has insufficient amount.
+* The app will then ask the customer if they would like to continue shopping.
+* If yes, they will go through the order process again.
+* If no, the app will end the connection.
+
+#### Screenshot 1:
